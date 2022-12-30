@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.ProdDAO">
+
+
+
+	<!-- 수동바인딩 맵사용되도 최종반환타입은  ProdVO-->
+	<resultMap type="ProdVO" id="prodMap" autoMapping="true">
+		<id property="prodId" column="PROD_ID"/>
+			<association property="buyer" javaType="BuyerVO" autoMapping="true"/><!--BUYER_NAME, BUYER_CHARGER  -->
+			<collection property="memberSet" ofType="MemberVO" autoMapping="true">
+				<id property="memId" column="MEM_ID"/>
+			</collection>
+	</resultMap>
+
+
+	<select id="selectProd" parameterType="String" resultMap="prodMap">
+				WITH CARTVIEW AS(
+			    SELECT CART_PROD
+			     ,MEM_ID, MEM_NAME, MEM_HP,MEM_MAIL, MEM_MILEAGE
+			    FROM CART INNER JOIN MEMBER ON(CART_MEMBER = MEM_ID)
+			)
+			SELECT
+			    prod_id, prod_name, prod_lgu,
+			    prod_buyer,  prod_cost,  prod_price,
+			    prod_sale,  prod_outline,  prod_detail,
+			    prod_img, prod_totalstock, prod_insdate,
+			    prod_properstock, prod_size,  prod_color,
+			    prod_delivery, prod_unit, prod_qtyin, prod_qtysale,
+			    prod_mileage
+			    ,LPROD_NM, BUYER_NAME, BUYER_CHARGER
+			    ,CARTVIEW.*
+			FROM PRODVIEW LEFT OUTER JOIN CARTVIEW ON (PROD_ID = CART_PROD)
+			WHERE PROD_ID = #{PROD_ID }
+	
+	</select>
+	
+	
+	<select id="selectProdList" resultType="kr.or.ddit.vo.ProdVO" parameterType="kr.or.ddit.vo.PagingVO">
+		   SELECT prod_id,prod_name,prod_lgu,prod_buyer
+       		 FROM PROD
+	
+	</select>
+	
+	<select id="selectTotalRecord" resultType="int" parameterType="kr.or.ddit.vo.PagingVO">
+			SELECT COUNT(*)
+			FROM PROD
+	</select>
+</mapper>
+
+
