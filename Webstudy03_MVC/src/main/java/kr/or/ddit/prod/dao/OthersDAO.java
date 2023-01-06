@@ -19,5 +19,7 @@ public interface OthersDAO {
 	
 	//특정분류에 해당하는것만 쪼개서
 	public List<BuyerVO> selectBuyerList(@Param("buyerLgu") String buyerLgu); 
+	
+	
 
 }

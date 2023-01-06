@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import kr.or.ddit.mvc.annotation.resolvers.HandlerMethodArgumentResolver;
 import kr.or.ddit.mvc.annotation.resolvers.ModelAttributeMethodProcessor;
 import kr.or.ddit.mvc.annotation.resolvers.RequestParamMethodArgumentResolver;
+import kr.or.ddit.mvc.annotation.resolvers.RequestPartMethodArgumentResolver;
 import kr.or.ddit.mvc.annotation.resolvers.RequestParamMethodArgumentResolver.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import kr.or.ddit.mvc.annotation.resolvers.ServletRequestMethodArgumentResolver;
@@ -33,6 +34,7 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
 		argumentResolvers.add(new ServletResponseMethodArgumentResolver());
 		argumentResolvers.add(new RequestParamMethodArgumentResolver());
 		argumentResolvers.add(new ModelAttributeMethodProcessor());
+		argumentResolvers.add(new RequestPartMethodArgumentResolver());
 		
 	}
 	//갖고있는 Resolvers가 여러개 일 경우 한개를 선택하는 작업 
@@ -54,7 +56,6 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
 	   
       Object handlerObject = mappingInfo.getCommandHandler();
       Method handlerMethod = mappingInfo.getHandlerMethod();
-      
     //argument 개수찾기 
       int parameterCount = handlerMethod.getParameterCount();
       

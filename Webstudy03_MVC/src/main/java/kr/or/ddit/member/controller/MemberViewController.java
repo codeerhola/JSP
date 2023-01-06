@@ -28,22 +28,12 @@ public class MemberViewController {
 	private MemberService service = new MemberServiceImpl();
 
 	@RequestMapping("/member/memberView.do")
-//	
 	public String memberView(
-			
-			
 			@RequestParam(value="who",required=true) String memId
 			,HttpServletRequest req
 			
 			) {
 		
-//		String memId = req.getParameter("who");
-//		
-//		if(StringUtils.isBlank(memId)) {
-//			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-//			return null;
-//		}
-//	
 		MemberVO member = service.retrieveMember(memId);
 		
 		req.setAttribute("member", member);

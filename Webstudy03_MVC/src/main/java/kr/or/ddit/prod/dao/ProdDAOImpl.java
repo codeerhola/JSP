@@ -13,7 +13,32 @@ import kr.or.ddit.vo.ProdVO;
 public class ProdDAOImpl implements ProdDAO{
 	
 	private SqlSessionFactory sqlSessionFactory = MybatisUtils.getSqlSessionFactory();
-		
+	
+	//등록
+	@Override
+	public int insertProd(ProdVO prod) {
+		try(
+				SqlSession sqlSession = sqlSessionFactory.openSession(); //2번
+			){
+			ProdDAO mapperProxy = sqlSession.getMapper(ProdDAO.class);//
+			int rowcnt = mapperProxy.insertProd(prod);
+				sqlSession.commit();
+				return rowcnt;
+			}
+	}
+	//수정
+	@Override
+	public int updateProd(ProdVO prod) {
+		try(
+				SqlSession sqlSession = sqlSessionFactory.openSession(); //2번
+			){
+			ProdDAO mapperProxy = sqlSession.getMapper(ProdDAO.class);//
+				int rowcnt = mapperProxy.updateProd(prod);
+				sqlSession.commit();
+				return rowcnt;
+			}
+	}
+	//검색	
 	@Override
 		public ProdVO selectProd(String prodId) {
 		try(
@@ -34,11 +59,9 @@ public class ProdDAOImpl implements ProdDAO{
 					return mapperProxy.selectTotalRecord(pagingVO);
 			}
 		}
-		
 		//상품리스트 
 		@Override
 		public List<ProdVO> selectProdList(PagingVO<ProdVO> pagingVO) {
-			
 			try(
 					SqlSession sqlSession = sqlSessionFactory.openSession(); 
 				){
@@ -46,5 +69,4 @@ public class ProdDAOImpl implements ProdDAO{
 					return mapperProxy.selectProdList(pagingVO);
 			}
 		}
-
 }

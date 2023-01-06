@@ -1,6 +1,8 @@
 package kr.or.ddit.vo;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -14,6 +16,7 @@ import javax.validation.groups.Default;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import kr.or.ddit.mvc.multipart.MultipartFile;
 import kr.or.ddit.validate.DeleteGroup;
 import kr.or.ddit.validate.InsertGroup;
 import kr.or.ddit.validate.UpdateGroup;
@@ -67,8 +70,9 @@ public class MemberVO implements Serializable{
 	
 	
 	public MemberVO(@NotBlank(groups = { Default.class, DeleteGroup.class }) String memId,
-			@NotBlank(groups = { Default.class, DeleteGroup.class }) @Size(min = 4, max = 8, groups = { Default.class,
-					DeleteGroup.class }) String memPass) {
+			@NotBlank(groups = { Default.class, DeleteGroup.class }) 
+			@Size(min = 4, max = 8, groups = { Default.class, DeleteGroup.class }) String memPass) 
+	{
 		super();
 		this.memId = memId;
 		this.memPass = memPass;
@@ -77,7 +81,7 @@ public class MemberVO implements Serializable{
 	
 	private int rnum;
 	
-	@NotBlank(groups= {Default.class, DeleteGroup.class})
+	//@NotBlank(groups= {Default.class, DeleteGroup.class})
 	private String memId; //가입, 수정, 삭제할때 검증 
 	
 	@JsonIgnore
@@ -119,4 +123,24 @@ public class MemberVO implements Serializable{
 	private int cartCount;
 	
 	private List<ProdVO> prodList;//has many 관계(1:N)
+	
+	private String memRole;
+	
+	private byte[] memImg; //db저장용
+	private MultipartFile memImage;
+	
+	
+	public void setMemImage(MultipartFile memImage) throws IOException {
+		if(memImage!=null && !memImage.isEmpty()) {
+			this.memImage = memImage;
+			this.memImg = memImage.getBytes();
+		}
+	}
+	
+	public String getBase64MemImg() {
+		if(memImg!=null)
+			return Base64.getEncoder().encodeToString(memImg);
+		else 
+			return null;
+	}
 }

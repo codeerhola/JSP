@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
+import org.apache.commons.text.WordUtils;
 
 
 /**
@@ -64,7 +65,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 			String attrName = modelAttribute.value();
 			//COc(Convention over Configuration)
 			if(StringUtils.isBlank(attrName)) {
-				attrName = CaseUtils.toCamelCase(parameterType.getSimpleName(), true, ' ');
+				attrName = WordUtils.uncapitalize(parameterType.getSimpleName());
 				
 			}
 			req.setAttribute(attrName, commandObject);

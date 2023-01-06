@@ -51,6 +51,7 @@ public class LoginProcessController {
 			try {
 				ServiceResult result = service.authenticate(member);
 				
+				//인증성공 시 
 				if(ServiceResult.OK.equals(result)) {
 					Cookie saveIdCookie = new Cookie("savedId", member.getMemId());
 					saveIdCookie.setDomain("localhost");
@@ -95,21 +96,6 @@ public class LoginProcessController {
 		return valid;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

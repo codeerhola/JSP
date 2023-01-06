@@ -1,6 +1,7 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,26 +12,52 @@ import javax.servlet.http.HttpSession;
 
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.mvc.annotation.streotype.Controller;
+import kr.or.ddit.mvc.annotation.streotype.RequestMapping;
 import kr.or.ddit.mvc.view.InternalResourceViewResolver;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.MemberVOWrapper;
 
-@WebServlet("/mypage.do")
-public class MyPageControllerServlet extends HttpServlet{
+
+@Controller
+public class MyPageController{
 	
 	private MemberService service = new MemberServiceImpl();
 	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		MemberVO authMember = (MemberVO)session.getAttribute("authMember");
-		authMember.getMemId();
+	
+	@RequestMapping("/mypage.do")
+	public String mypage(HttpServletRequest req
+			,MemberVOWrapper principal){
+		
+		
+		MemberVO authMember = principal.getRealMember();
 		
 		MemberVO member = service.retrieveMember(authMember.getMemId());
 		
 		req.setAttribute("member", member);
 		
 		String viewName = "member/memberView"; //logical view name 
+		return viewName;
 		
-		new InternalResourceViewResolver("/WEB-INF/views/",".jsp").resolveView(viewName, req, resp);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

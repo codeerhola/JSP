@@ -7,6 +7,29 @@ import kr.or.ddit.vo.ProdVO;
 
 public interface ProdDAO {
 	
+	
+	
+	/**
+	 * 신규 상품 등록
+	 * @param prod
+	 * @return 등록된 상품의 수 
+	 */
+	public int insertProd(ProdVO prod);
+	
+	/**
+	 * 상품 수정
+	 * @param prod
+	 * @return 수정된 상품의 수 
+	 */
+	public int updateProd(ProdVO prod);
+	
+	/**
+	 * 
+	 * @param prodId
+	 * @return
+	 */
+	//public int deleteProd(String prodId);
+	
 	/**
 	 * 
 	 * @param prodId

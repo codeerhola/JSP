@@ -44,10 +44,7 @@ public class ProdListController {
 		return "prod/prodList";
 	}
 	//2. 데이터 필요한 처리구조 필요 
-	private String listData(
-			int currentPage  
-			,HttpServletRequest req
-	) throws ServletException {
+	private String listData(int currentPage ,HttpServletRequest req) throws ServletException {
 		//파라미터 가져오기 
 		//String pageParam = req.getParameter("page");
 		
@@ -65,16 +62,12 @@ public class ProdListController {
 				throw new ServletException(e);
 		}
 		
-//		int currentPage = 1;
-//		//파라미터 검증 
-//		if(StringUtils.isNumeric(pageParam)) {
-//			currentPage = Integer.parseInt(pageParam);
-//		}
-		
+
 		// 페이징vo 만듦
 		PagingVO<ProdVO> pagingVO = new PagingVO<>(5, 2);
 		
 		pagingVO.setCurrentPage(currentPage);
+		
 		//pagingVO.setSimpleCondition(simpleCondition); //단순검색 
 		pagingVO.setDetailCondition(detailCondition); //상세검색
 

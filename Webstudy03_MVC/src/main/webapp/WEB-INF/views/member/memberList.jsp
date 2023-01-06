@@ -76,10 +76,10 @@
    <input type="text" name="searchType" />
    <input type="text" name="searchWord" />
 </form>
-${requestScope}
+<%-- ${requestScope} --%>
 <script type="text/javascript">
-   $("[name=searchType]").val("${searchvo.searchType}");
-   $("[name=searchWord]").val("${searchvo.searchWord}");
+   $("[name=searchType]").val("${searchVO.searchType}");
+   $("[name=searchWord]").val("${searchVO.searchWord}");
    
    let searchForm = $("#searchForm");
    let searchUI = $("#searchUI").on("click", "#searchBtn", function(){

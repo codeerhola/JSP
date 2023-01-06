@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
 <!DOCTYPE html>
@@ -6,9 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<jsp:include page="/includee/preScript.jsp" />
 </head>
 <body>
-	<table>
+	<table class="table table-bordered">
 		<tr>
 			<th>상품아이디</th>
 			<td>${prod.prodId}</td>
@@ -24,7 +26,7 @@
 		<tr>
 			<th>거래처</th>
 			<td>
-				<table>
+				<table class="table table-bordered">
 					<thead>
 						<tr>
 							<th>거래처명</th>
@@ -37,7 +39,7 @@
 						<tr>
 							<td>
 								<c:url value="/buyer/buyerView.do" var="buyerViewURL">
-									<c:param name="what" value="${buyer.buyerId }" />
+									<c:param name="what" value="${prod.prodBuyer }" />
 								</c:url>
 								<a href="${buyerViewURL }">${buyer.buyerName }</a>
 							</td>
@@ -70,7 +72,9 @@
 		</tr>
 		<tr>
 			<th>상품이미지</th>
-			<td>${prod.prodImg}</td>
+			<td>
+			<img src="${pageContext.request.contextPath}/resources/prodImages/${prod.prodImg}">
+			</td>
 		</tr>
 		<tr>
 			<th>재고</th>
@@ -113,9 +117,20 @@
 			<td>${prod.prodMileage}</td>
 		</tr>
 		<tr>
+			<td colspan="2">
+				<c:url value='/prod/prodList.do' var="listURL"/>
+				<a class="btn btn-secondary" href="${listURL }">목록으로</a>
+				
+				<c:url value='/prod/prodUpdate.do' var="updateURL">
+					<c:param name="what" value="${prod.prodId }"/>
+				</c:url>
+				<a href="${updateURL}" class="btn btn-primary">상품수정</a>
+			</td>
+		</tr>
+		<tr>
 			<th>구매자목록</th>
 			<td>
-				<table>
+				<table class="table table-bordered">
 					<thead>
 						<tr>
 							<th>구매자명</th>
@@ -150,6 +165,7 @@
 			</td>
 		</tr>
 	</table>
+<jsp:include page="/includee/postScript.jsp" />	
 </body>
 </html>
 
@@ -159,3 +175,9 @@
 
 
 
+
+
+
+
+
+ 

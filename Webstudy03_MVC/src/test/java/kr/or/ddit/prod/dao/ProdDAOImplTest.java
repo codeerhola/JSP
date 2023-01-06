@@ -16,11 +16,18 @@ public class ProdDAOImplTest {
 	
 	private ProdDAO dao = new ProdDAOImpl();
 	private PagingVO<ProdVO> pagingVO;
+	private ProdVO prod;
 	
 	@Before
 	public void setUp() {
 		pagingVO = new PagingVO<>();
 		pagingVO.setCurrentPage(1);
+		
+		prod.setProdId("");
+		prod.setProdName("");
+		prod.setProdLgu("");
+		prod.setProdBuyer("prodBuyer");
+		
 	}
 	
 
@@ -49,6 +56,15 @@ public class ProdDAOImplTest {
 		log.info("prodList: {}", prodList);
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }

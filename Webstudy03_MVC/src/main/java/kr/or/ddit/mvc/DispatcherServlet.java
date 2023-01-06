@@ -45,7 +45,6 @@ public class DispatcherServlet extends HttpServlet{
 	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
 		
 		String requestURI = req.getServletPath();
 		//아래 코드를 핸들러매핑의 핸들러 맵 1:1 관계임  핸들러매핑의 구현체로 넘김 

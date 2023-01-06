@@ -1,24 +1,22 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 import kr.or.ddit.enumpkg.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.mvc.annotation.RequestMethod;
 import kr.or.ddit.mvc.annotation.resolvers.ModelAttribute;
+import kr.or.ddit.mvc.annotation.resolvers.RequestPart;
 import kr.or.ddit.mvc.annotation.streotype.Controller;
 import kr.or.ddit.mvc.annotation.streotype.RequestMapping;
+import kr.or.ddit.mvc.multipart.MultipartFile;
 import kr.or.ddit.validate.InsertGroup;
 import kr.or.ddit.validate.ValidationUtils;
 import kr.or.ddit.vo.MemberVO;
@@ -46,11 +44,14 @@ public class MemberInsertController {
 			
 			HttpServletRequest req
 			,@ModelAttribute("member") MemberVO member
-			) throws ServletException{ 
-	
-	
-		//여기에서 검증해야해 
+			,@RequestPart(value="memImage",required=false) MultipartFile memImage
+			
+			) throws ServletException, IOException{
 		
+				member.setMemImage(memImage);
+		
+			
+		//여기에서 검증해야해 
 		Map<String, List<String>> errors = new LinkedHashMap<>();
 		req.setAttribute("errors", errors);
 		boolean valid = ValidationUtils.validate(member, errors, InsertGroup.class);

@@ -25,14 +25,11 @@
 		</association>
 	</resultMap> -->
 	
-	
 	<select id="selectTotalRecord" resultType="int" parameterType="kr.or.ddit.vo.PagingVO">
 			SELECT COUNT(*)
 			FROM PRODVIEW
 			<include refid="searchFrag"/>
 	</select>
-	
-	
 	
 	<select id="selectProdList" resultType="ProdVO" parameterType="PagingVO">
 		   WITH ORDERPROD AS (
@@ -88,11 +85,89 @@
 			    ,CARTVIEW.*
 			FROM PRODVIEW LEFT OUTER JOIN CARTVIEW ON (PROD_ID = CART_PROD)
 			WHERE PROD_ID = #{PROD_ID }
-	
 	</select>
 	
 	
-
+	<insert id="insertProd"  parameterType="ProdVO" >
+		<selectKey order="BEFORE" resultType="String" keyProperty="prodId">
+			SELECT #{prodLgu,jdbcType=CHAR} || 
+		  		LPAD(NVL(TO_NUMBER(SUBSTR(MAX(PROD_ID),5)),0)+1,6,'0')
+		  	FROM PROD
+			WHERE PROD_LGU =  #{prodLgu,jdbcType=CHAR}
+		
+		</selectKey>
+	INSERT INTO PROD(
+		 PROD_ID
+		,PROD_NAME
+		,PROD_LGU
+		,PROD_BUYER
+		,PROD_COST
+		,PROD_PRICE
+		,PROD_SALE
+		,PROD_OUTLINE
+		,PROD_DETAIL
+		,PROD_IMG
+		,PROD_TOTALSTOCK
+		,PROD_INSDATE
+		,PROD_PROPERSTOCK
+		,PROD_SIZE
+		,PROD_COLOR
+		,PROD_DELIVERY
+		,PROD_UNIT
+		,PROD_QTYIN
+		,PROD_QTYSALE
+		,PROD_MILEAGE
+		)VALUES(
+		#{prodId}
+		, #{prodName,jdbcType=VARCHAR}
+		, #{prodLgu,jdbcType=CHAR}
+		, #{prodBuyer,jdbcType=CHAR}
+		, #{prodCost,jdbcType=NUMERIC}
+		, #{prodPrice,jdbcType=NUMERIC}
+		, #{prodSale,jdbcType=NUMERIC}
+		, #{prodOutline,jdbcType=VARCHAR}
+		, #{prodDetail,jdbcType=CLOB}
+		, #{prodImg,jdbcType=VARCHAR}
+		, #{prodTotalstock,jdbcType=NUMERIC}
+		, #{prodInsdate,jdbcType=DATE}
+		, #{prodProperstock,jdbcType=NUMERIC}
+		, #{prodSize,jdbcType=VARCHAR}
+		, #{prodColor,jdbcType=VARCHAR}
+		, #{prodDelivery,jdbcType=VARCHAR}
+		, #{prodUnit,jdbcType=VARCHAR}
+		, #{prodQtyin,jdbcType=NUMERIC}
+		, #{prodQtysale,jdbcType=NUMERIC}
+		, #{prodMileage,jdbcType=NUMERIC}
+	)		    
+	</insert>
+	
+	<update id="updateProd" parameterType="ProdVO">
+			UPDATE PROD
+			SET
+				 PROD_NAME       = #{prodName,jdbcType=VARCHAR}
+				,PROD_LGU        = #{prodLgu,jdbcType=CHAR}
+				,PROD_BUYER      = #{prodBuyer,jdbcType=CHAR}
+				,PROD_COST       = #{prodCost,jdbcType=NUMERIC}
+				,PROD_PRICE      = #{prodPrice,jdbcType=NUMERIC}
+				,PROD_SALE       = #{prodSale,jdbcType=NUMERIC}
+				,PROD_OUTLINE    = #{prodOutline,jdbcType=VARCHAR}
+				,PROD_DETAIL     = #{prodDetail,jdbcType=CLOB}
+				,PROD_TOTALSTOCK = #{prodTotalstock,jdbcType=NUMERIC}
+				,PROD_INSDATE    = #{prodInsdate,jdbcType=DATE}
+				,PROD_PROPERSTOCK= #{prodProperstock,jdbcType=NUMERIC}
+				,PROD_SIZE       = #{prodSize,jdbcType=VARCHAR}
+				,PROD_COLOR      = #{prodColor,jdbcType=VARCHAR}
+				,PROD_DELIVERY   = #{prodDelivery,jdbcType=VARCHAR}
+				,PROD_UNIT       = #{prodUnit,jdbcType=VARCHAR}
+				,PROD_QTYIN      = #{prodQtyin,jdbcType=NUMERIC}
+				,PROD_QTYSALE    = #{prodQtysale,jdbcType=NUMERIC}
+				,PROD_MILEAGE    = #{prodMileage,jdbcType=NUMERIC}
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(prodImg)">
+				,PROD_IMG = #{prodImg,jdbcType=VARCHAR}
+				</if>
+				
+			WHERE PROD_ID=#{prodId}
+	</update>
 </mapper>
 
 

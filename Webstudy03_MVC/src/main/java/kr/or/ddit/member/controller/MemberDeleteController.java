@@ -123,23 +123,27 @@ import org.slf4j.LoggerFactory;
 import kr.or.ddit.enumpkg.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.mvc.annotation.RequestMethod;
+import kr.or.ddit.mvc.annotation.streotype.Controller;
+import kr.or.ddit.mvc.annotation.streotype.RequestMapping;
 import kr.or.ddit.mvc.view.InternalResourceViewResolver;
 import kr.or.ddit.validate.DeleteGroup;
 import kr.or.ddit.validate.ValidationUtils;
 import kr.or.ddit.vo.MemberVO;
 
-
-@WebServlet("/member/memberDelete.do")
-public class MemberDeleteControllerServlet extends HttpServlet {
+@Controller
+public class MemberDeleteController  {
    
-   private static final Logger log = LoggerFactory.getLogger(MemberDeleteControllerServlet.class);
+   private static final Logger log = LoggerFactory.getLogger(MemberDeleteController.class);
    
    private MemberService service = new MemberServiceImpl();
+
    
-   @Override
-   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//      1.
-      HttpSession session = req.getSession();
+   @RequestMapping(value="/member/memberDelete.do",method=RequestMethod.POST)
+   
+  public String delete(HttpServletRequest req,  HttpSession session ,HttpServletResponse resp) throws ServletException, IOException {
+
+	 session = req.getSession();
       MemberVO authMember = (MemberVO)session.getAttribute("authMember");
       String memId = authMember.getMemId();
       
@@ -159,11 +163,11 @@ public class MemberDeleteControllerServlet extends HttpServlet {
          switch (result) {
          case INVALIDPASSWORD:
             session.setAttribute("message", "비번 오류");
-            viewName = "redirect://mypage.do";
+            viewName = "redirect:/mypage.do";
             break;
          case FAIL:
             session.setAttribute("message", "서버 오류");
-            viewName = "redirect://mypage.do";
+            viewName = "redirect:/mypage.do";
             break;
          default:
             session.invalidate();
@@ -175,8 +179,8 @@ public class MemberDeleteControllerServlet extends HttpServlet {
          session.setAttribute("message", "아이디나 비밀번호 누락");
          viewName = "redirect:/mypage.do";
       }
+      return viewName;
       
-      new InternalResourceViewResolver("/WEB-INF/views/",".jsp").resolveView(viewName, req, resp);
    }
 }
       

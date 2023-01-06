@@ -1,62 +1,65 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 import kr.or.ddit.enumpkg.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
-import kr.or.ddit.mvc.view.InternalResourceViewResolver;
+import kr.or.ddit.mvc.annotation.RequestMethod;
+import kr.or.ddit.mvc.annotation.resolvers.ModelAttribute;
+import kr.or.ddit.mvc.annotation.resolvers.RequestPart;
+import kr.or.ddit.mvc.annotation.streotype.Controller;
+import kr.or.ddit.mvc.annotation.streotype.RequestMapping;
+import kr.or.ddit.mvc.multipart.MultipartFile;
 import kr.or.ddit.validate.UpdateGroup;
 import kr.or.ddit.validate.ValidationUtils;
 import kr.or.ddit.vo.MemberVO;
 
-@WebServlet("/member/memberUpdate.do")
-public class MemberUpdateControllerServlet extends HttpServlet{
+
+@Controller
+public class MemberUpdateController{
 	
 	private MemberService service = new MemberServiceImpl();
 	
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@RequestMapping("/member/memberUpdate.do")
+	public String updateForm(HttpSession session, 
+//	    	, @SessionAttribute("authMember") MemberVO authMember			
+			HttpServletRequest req) {
 		
-		HttpSession session = req.getSession();
 		MemberVO authMember = (MemberVO) session.getAttribute("authMember");
-		
 		MemberVO member = service.retrieveMember(authMember.getMemId());
 		
 		req.setAttribute("member", member);
+		return "member/memberForm";
 		
-		String viewName = "member/memberForm";
-		
-		new InternalResourceViewResolver("/WEB-INF/views/", ".jsp").resolveView(viewName, req, resp);
 	}
 	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@RequestMapping(value="/member/memberUpdate.do",method=RequestMethod.POST)
+	public String updateProcess(
+				@ModelAttribute("member") MemberVO member  
+				,HttpServletRequest req
+				,@RequestPart(value="memImgage", required=false) MultipartFile memImage
+				,HttpSession session
+			) throws IOException{
 		
-		req.setCharacterEncoding("UTF-8");
+		member.setMemImage(memImage);
 		
-		MemberVO member = new MemberVO();
+		//@ModelAttribute("member") MemberVO member 밑에 주석을 이 한줄로 가능  
+		
+/*		MemberVO member = new MemberVO();
 		req.setAttribute("member", member);
 		try {
 			BeanUtils.populate(member, req.getParameterMap());
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new ServletException(e);
 		}
-		
+*/		
 		String viewName = null;
 		
 		
@@ -77,18 +80,19 @@ public class MemberUpdateControllerServlet extends HttpServlet{
 				viewName = "member/memberForm";
 				break;
 				
-			default:
+			default: //등록성공
+				
+				MemberVO modifiedMember = service.retrieveMember(member.getMemId());
+				session.setAttribute("authMember", modifiedMember);
 				viewName = "redirect:/mypage.do";
 				break;
 			}
 		}else {
 			viewName = "member/memberForm";
 		}
-		
-		new InternalResourceViewResolver("/WEB-INF/views/", ".jsp").resolveView(viewName, req, resp);
+		return viewName;
 	}
 }
 
 
 
-//수정중 오류가 나면 member 이전에 내가 입력했던 데이터가 다시감 

@@ -15,25 +15,37 @@
 </head>
 <body>
 	<h4>가입 양식</h4>
-	<form method="post">
+	<form method="post" enctype="multipart/form-data">
 		<table>
 			<tr>
 				<th>회원아이디</th>
 				<td><input class="from-control" type="text" 
-					name="memId" value="${member.memId}" /><span class="text-danger">${errors.memId}<span><td>
+					name="memId" value="${member.memId}" />
+					<span class="text-danger">${errors.memId}<span><td>
 			</tr>
 			<tr>
 				<th>비밀번호</th>
 				<td><input class="from-control" type="text" 
-					name="memPass" value="${member.memPass}" /><span
-					class="text-danger">${errors.memPass}<span><td>
+					name="memPass" value="${member.memPass}" />
+					<span class="text-danger">${errors.memPass}<span><td>
 			</tr>
 			<tr>
 				<th>회원명</th>
 				<td><input class="from-control" type="text" 
-					name="memName" value="${member.memName}" /><span
-					class="text-danger">${errors.memName}<span><td>
+					name="memName" value="${member.memName}" />
+					<span class="text-danger">${errors.memName}<span><td>
 			</tr>
+			
+			
+			<tr>
+				<th>회원프로필</th>
+				<td>
+					<input type="file" name="memImage" accept="image/*"/>
+					<span class="text-danger">${errors.memImage }</span>
+				</td>
+			</tr>
+			
+			
 			<tr>
 				<th>주민번호1</th>
 				<td><input class="from-control" type="text" name="memRegno1"
