@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- @Required를 비롯한 어노테이션들이 동작할 수 있는 BeanPostProcessoer 가 자동 등록됨. -->
+	<context:annotation-config/>
+	
+	
+	<!--Model layer 구성 요소 객체 bean 으로 등록하기 위한 필터 설정 
+	Componet, service, repository, configuration 상위에 등록   -->
+	<context:component-scan base-package="kr.or.ddit" use-default-filters="true">
+		
+		<context:exclude-filter type="annotation" 
+					expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" 
+					expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	
+	</context:component-scan>
+	
+	
+</beans>
